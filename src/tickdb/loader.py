@@ -18,6 +18,23 @@ from pydantic import BaseModel
 from .core import TickDBConfig
 from .schemas import SchemaDefinition
 
+# Try to import C++ and Rust components for high performance
+try:
+    from . import dataset_core_python as cpp_core
+    HAS_CPP = True
+except ImportError:
+    HAS_CPP = False
+    logger = logging.getLogger(__name__)
+    logger.warning("C++ components not available, using Python fallback")
+
+try:
+    from . import dataset_core_rust as rust_core
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Rust components not available, using Python fallback")
+
 logger = logging.getLogger(__name__)
 
 
@@ -219,7 +236,46 @@ class DataLoader:
             raise ValueError(f"Unsupported format: {file_format}")
     
     def _read_csv(self, file_path: Path, **kwargs: Any) -> pa.Table:
-        """Read CSV file."""
+        """Read CSV file with high-performance components if available."""
+        
+        # Try to use C++ SIMD parser for maximum performance
+        if HAS_CPP:
+            try:
+                logger.info("Using C++ SIMD parser for CSV reading")
+                with open(file_path, 'rb') as f:
+                    data = f.read()
+                
+                parser = cpp_core.SimdParser()
+                delimiter = kwargs.get("delimiter", ",").encode()[0]
+                batch_size = kwargs.get("batch_size", self.config.batch_size)
+                
+                table = parser.parse_csv_simd(data, delimiter, batch_size)
+                stats = parser.get_stats()
+                logger.info("C++ parsing completed", extra=stats)
+                return table
+            except Exception as e:
+                logger.warning(f"C++ parser failed, falling back to Python: {e}")
+        
+        # Try to use Rust parser as fallback
+        if HAS_RUST:
+            try:
+                logger.info("Using Rust parser for CSV reading")
+                with open(file_path, 'rb') as f:
+                    data = f.read()
+                
+                parser = rust_core.SimdParser()
+                delimiter = kwargs.get("delimiter", ",")
+                batch_size = kwargs.get("batch_size", self.config.batch_size)
+                
+                table = parser.parse_csv_py(data, delimiter, batch_size)
+                stats = parser.get_stats_py()
+                logger.info("Rust parsing completed", extra=stats)
+                return table
+            except Exception as e:
+                logger.warning(f"Rust parser failed, falling back to Python: {e}")
+        
+        # Fallback to standard Arrow CSV reader
+        logger.info("Using standard Arrow CSV reader")
         read_options = csv.ReadOptions(
             skip_rows=kwargs.get("skip_rows", 0),
             column_names=kwargs.get("column_names"),
