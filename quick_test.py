@@ -152,7 +152,7 @@ def main():
         print("- Data quality analysis")
         
         print("\nNext steps:")
-        print("1. Install C++/Rust compilers for optimal performance")
+        print("1. Install Rust compiler for optimal performance")
         print("2. Test with larger datasets")
         print("3. Use CLI interface: python -m tickdb.cli")
         print("4. Deploy with Docker: docker-compose up")

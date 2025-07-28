@@ -150,7 +150,7 @@ def append(tickdb: TickDB, schema_id: str, csv_file: str, source_id: Optional[st
         table.add_row("Rows Processed", str(result.get("rows_processed", 0)))
         table.add_row("Rows Failed", str(result.get("rows_failed", 0)))
         table.add_row("Files Created", str(len(result.get("files_created", []))))
-        table.add_row("Processing Time (ms)", f"{result.get("processing_time_ms", 0):.2f}")
+        table.add_row("Processing Time (ms)", f"{result.get('processing_time_ms', 0):.2f}")
         
         console.print(table)
         

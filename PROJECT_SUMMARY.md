@@ -268,7 +268,7 @@ tickdb metrics
 
 ### Planned Features
 
-1. **Rust/C++ Core**: High-performance SIMD optimizations
+1. **Rust Core**: High-performance SIMD optimizations
 2. **Streaming Support**: Real-time data ingestion
 3. **S3 Integration**: Cloud storage support
 4. **Advanced Partitioning**: Time-based and hash partitioning

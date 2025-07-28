@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Comprehensive Integration Test for Dataset Cleaner + Latency Tick-Store
-Tests Python, Rust, and C++ components (where available)
+Tests Python and Rust components (where available)
 """
 
 import sys
@@ -229,7 +229,7 @@ def benchmark_performance(csv_path, python_time, duckdb_time, pyarrow_time, rust
         print(f"  Rust:            Available (tested separately)")
     
     if cpp_available:
-        print(f"  C++:             Available (tested separately)")
+        print(f"  C++:             Removed from project")
     
     # Calculate relative performance
     fastest = min(python_time, duckdb_time, pyarrow_time)
@@ -282,12 +282,12 @@ def main():
         if rust_ok and cpp_ok:
             print("\n🎉 All components are working! Full integration achieved.")
         elif rust_ok:
-            print("\n✅ Python + Rust integration working. C++ can be added later.")
+            print("\n✅ Python + Rust integration working.")
         elif cpp_ok:
             print("\n✅ Python + C++ compiler available. Rust can be added later.")
         else:
             print("\n✅ Python processing pipeline is fully functional.")
-            print("   Rust and C++ components can be added for performance optimization.")
+            print("   Rust components provide excellent performance optimization.")
         
     finally:
         # Cleanup
