@@ -1,0 +1,75 @@
+{
+  "id": "ticks_v1",
+  "version": "1.0.0",
+  "description": "Standard tick data schema",
+  "fields": [
+    {
+      "name": "ts",
+      "type": "timestamp[ns]",
+      "nullable": false,
+      "description": "Timestamp in nanoseconds",
+      "constraints": null
+    },
+    {
+      "name": "symbol",
+      "type": "string",
+      "nullable": false,
+      "description": "Trading symbol",
+      "constraints": null
+    },
+    {
+      "name": "price",
+      "type": "float64",
+      "nullable": false,
+      "description": "Trade price",
+      "constraints": null
+    },
+    {
+      "name": "size",
+      "type": "int64",
+      "nullable": false,
+      "description": "Trade size",
+      "constraints": null
+    },
+    {
+      "name": "side",
+      "type": "string",
+      "nullable": true,
+      "description": "Trade side (buy/sell)",
+      "constraints": null
+    },
+    {
+      "name": "exchange",
+      "type": "string",
+      "nullable": true,
+      "description": "Exchange identifier",
+      "constraints": null
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "nullable": false,
+      "description": "Data source identifier",
+      "constraints": null
+    },
+    {
+      "name": "ingest_ts",
+      "type": "timestamp[ns]",
+      "nullable": false,
+      "description": "Ingestion timestamp",
+      "constraints": null
+    }
+  ],
+  "partition_by": [
+    "symbol",
+    "dt"
+  ],
+  "sort_by": [
+    "ts"
+  ],
+  "metadata": {
+    "compression": "zstd",
+    "compression_level": 5,
+    "batch_size": 16384
+  }
+}

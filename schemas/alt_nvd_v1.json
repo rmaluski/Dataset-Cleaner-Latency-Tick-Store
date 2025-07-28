@@ -1,0 +1,75 @@
+{
+  "id": "alt_nvd_v1",
+  "version": "1.0.0",
+  "description": "Alternative data schema for news/sentiment",
+  "fields": [
+    {
+      "name": "ts",
+      "type": "timestamp[ns]",
+      "nullable": false,
+      "description": "Event timestamp",
+      "constraints": null
+    },
+    {
+      "name": "symbol",
+      "type": "string",
+      "nullable": false,
+      "description": "Related symbol",
+      "constraints": null
+    },
+    {
+      "name": "event_type",
+      "type": "string",
+      "nullable": false,
+      "description": "Event type (news, sentiment, etc.)",
+      "constraints": null
+    },
+    {
+      "name": "content",
+      "type": "string",
+      "nullable": true,
+      "description": "Event content",
+      "constraints": null
+    },
+    {
+      "name": "score",
+      "type": "float64",
+      "nullable": true,
+      "description": "Sentiment score (-1 to 1)",
+      "constraints": null
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "nullable": true,
+      "description": "Data source",
+      "constraints": null
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "nullable": false,
+      "description": "Data source identifier",
+      "constraints": null
+    },
+    {
+      "name": "ingest_ts",
+      "type": "timestamp[ns]",
+      "nullable": false,
+      "description": "Ingestion timestamp",
+      "constraints": null
+    }
+  ],
+  "partition_by": [
+    "symbol",
+    "dt"
+  ],
+  "sort_by": [
+    "ts"
+  ],
+  "metadata": {
+    "compression": "zstd",
+    "compression_level": 3,
+    "batch_size": 8192
+  }
+}

@@ -10,7 +10,7 @@ import pandas as pd
 import pyarrow as pa
 from pydantic import BaseModel
 
-from .core import TickDBConfig
+from .config import TickDBConfig
 from .schemas import SchemaDefinition
 
 logger = logging.getLogger(__name__)

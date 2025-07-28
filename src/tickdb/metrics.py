@@ -32,24 +32,29 @@ class MetricsCollector:
     - Query latency tracking
     """
     
-    def __init__(self, port: int = 8000):
+    def __init__(self, port: int = 8000, enable_server: bool = False):
         """
         Initialize metrics collector.
         
         Args:
             port: Port for Prometheus metrics server
+            enable_server: Whether to start the HTTP metrics server
         """
         self.port = port
+        self.enable_server = enable_server
         
         # Initialize Prometheus metrics
         self._init_prometheus_metrics()
         
-        # Start metrics server
-        try:
-            start_http_server(port)
-            logger.info(f"Prometheus metrics server started on port {port}")
-        except Exception as e:
-            logger.warning(f"Failed to start metrics server: {e}")
+        # Start metrics server only if enabled
+        if enable_server:
+            try:
+                start_http_server(port)
+                logger.info(f"Prometheus metrics server started on port {port}")
+            except Exception as e:
+                logger.warning(f"Failed to start metrics server: {e}")
+        else:
+            logger.info("Metrics server disabled (enable_server=False)")
         
         # In-memory metrics for quick access
         self._metrics = defaultdict(dict)

@@ -15,17 +15,17 @@ import pyarrow.csv as csv
 import pyarrow.parquet as pq
 from pydantic import BaseModel
 
-from .core import TickDBConfig
+from .config import TickDBConfig
 from .schemas import SchemaDefinition
 
-# Try to import C++ and Rust components for high performance
+# Try to import Rust components for high performance
 try:
     from . import dataset_core_python as cpp_core
     HAS_CPP = True
 except ImportError:
     HAS_CPP = False
     logger = logging.getLogger(__name__)
-    logger.warning("C++ components not available, using Python fallback")
+    logger.warning("Rust components not available, using Python fallback")
 
 try:
     from . import dataset_core_rust as rust_core
@@ -238,10 +238,10 @@ class DataLoader:
     def _read_csv(self, file_path: Path, **kwargs: Any) -> pa.Table:
         """Read CSV file with high-performance components if available."""
         
-        # Try to use C++ SIMD parser for maximum performance
+        # Try to use Rust SIMD parser for maximum performance
         if HAS_CPP:
             try:
-                logger.info("Using C++ SIMD parser for CSV reading")
+                logger.info("Using Rust SIMD parser for CSV reading")
                 with open(file_path, 'rb') as f:
                     data = f.read()
                 
@@ -251,10 +251,10 @@ class DataLoader:
                 
                 table = parser.parse_csv_simd(data, delimiter, batch_size)
                 stats = parser.get_stats()
-                logger.info("C++ parsing completed", extra=stats)
+                logger.info("Rust parsing completed", extra=stats)
                 return table
             except Exception as e:
-                logger.warning(f"C++ parser failed, falling back to Python: {e}")
+                logger.warning(f"Rust parser failed, falling back to Python: {e}")
         
         # Try to use Rust parser as fallback
         if HAS_RUST:

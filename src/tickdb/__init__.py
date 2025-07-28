@@ -9,6 +9,7 @@ __author__ = "Your Name"
 __email__ = "your.email@example.com"
 
 from .core import TickDB
+from .config import TickDBConfig
 from .schemas import SchemaRegistry
 from .loader import DataLoader
 from .reader import DataReader
@@ -17,6 +18,7 @@ from .metrics import MetricsCollector
 
 __all__ = [
     "TickDB",
+    "TickDBConfig",
     "SchemaRegistry", 
     "DataLoader",
     "DataReader",

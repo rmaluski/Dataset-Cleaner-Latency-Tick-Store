@@ -16,7 +16,7 @@ A universal, high-throughput data-lake that every later module depends on.
 ```
 ┌────────────┐     Extract       ┌────────────┐  Validate  ┌──────────────┐
 │  Raw Data  ├──────────────────▶│  Loader    ├────────────▶│ GreatExpect. │
-│  (CSV/JSON │  (stream / batch) │  (C++/Rust)│            │   Engine     │
+│  (CSV/JSON │  (stream / batch) │  (Rust)    │            │   Engine     │
 └────────────┘                   └─────┬──────┘            └──────┬───────┘
                                        │ Arrow RecordBatch        │ pass/fail rows
                                        ▼                          ▼
@@ -97,7 +97,7 @@ dataset-cleaner/
 ├── src/
 │   ├── rust/                 # High-performance Rust core
 │   ├── python/               # Python API wrapper
-│   └── cpp/                  # C++ SIMD optimizations
+│   └── rust/                 # Rust SIMD optimizations
 ├── schemas/                  # Schema registry
 ├── tests/                    # Test suite
 ├── benchmarks/               # Performance benchmarks

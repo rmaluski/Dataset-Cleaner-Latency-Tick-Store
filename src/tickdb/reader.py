@@ -14,13 +14,15 @@ import pyarrow.dataset as ds
 import pyarrow.parquet as pq
 from pydantic import BaseModel
 
-from .core import TickDBConfig
+from .config import TickDBConfig
 
 logger = logging.getLogger(__name__)
 
 
 class QueryResult(BaseModel):
     """Result of a data query operation."""
+    
+    model_config = {"arbitrary_types_allowed": True}
     
     table: pa.Table
     query_time_ms: float = 0.0

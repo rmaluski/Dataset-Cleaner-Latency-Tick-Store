@@ -11,13 +11,13 @@ from pathlib import Path
 
 def run_command(cmd, description):
     """Run a command and handle errors."""
-    print(f"🔄 {description}...")
+    print(f"[INFO] {description}...")
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
-        print(f"✅ {description} completed successfully")
+        print(f"[SUCCESS] {description} completed successfully")
         return result.stdout
     except subprocess.CalledProcessError as e:
-        print(f"❌ {description} failed: {e}")
+        print(f"[ERROR] {description} failed: {e}")
         print(f"Error output: {e.stderr}")
         return None
 
@@ -25,9 +25,9 @@ def run_command(cmd, description):
 def check_python_version():
     """Check if Python version is compatible."""
     if sys.version_info < (3, 11):
-        print("❌ Python 3.11 or higher is required")
+        print("[ERROR] Python 3.11 or higher is required")
         sys.exit(1)
-    print(f"✅ Python {sys.version_info.major}.{sys.version_info.minor} detected")
+    print(f"[SUCCESS] Python {sys.version_info.major}.{sys.version_info.minor} detected")
 
 
 def create_directories():
@@ -44,12 +44,12 @@ def create_directories():
     
     for directory in directories:
         Path(directory).mkdir(parents=True, exist_ok=True)
-        print(f"📁 Created directory: {directory}")
+        print(f"[INFO] Created directory: {directory}")
 
 
 def install_dependencies():
     """Install Python dependencies."""
-    print("📦 Installing Python dependencies...")
+    print("[INFO] Installing Python dependencies...")
     
     # Install in development mode
     result = run_command("pip install -e .[dev]", "Installing TickDB in development mode")
@@ -63,22 +63,22 @@ def install_dependencies():
 
 def run_tests():
     """Run the test suite."""
-    print("🧪 Running tests...")
+    print("[INFO] Running tests...")
     result = run_command("pytest tests/ -v", "Running test suite")
     if not result:
-        print("⚠️  Some tests failed, but continuing with setup")
+        print("[WARNING] Some tests failed, but continuing with setup")
     else:
-        print("✅ All tests passed!")
+        print("[SUCCESS] All tests passed!")
 
 
 def create_sample_data():
     """Create sample data for testing."""
-    print("📊 Creating sample data...")
+    print("[INFO] Creating sample data...")
     
     # Check if sample CSV exists
     sample_csv = Path("examples/sample_ticks.csv")
     if not sample_csv.exists():
-        print("⚠️  Sample CSV file not found, creating basic example...")
+        print("[WARNING] Sample CSV file not found, creating basic example...")
         
         # Create a simple sample CSV
         sample_data = """ts,symbol,price,size,side,exchange
@@ -89,12 +89,12 @@ def create_sample_data():
 2025-01-27T09:30:00.400000000,ES,4500.75,100,buy,CME"""
         
         sample_csv.write_text(sample_data)
-        print("✅ Created sample CSV file")
+        print("[SUCCESS] Created sample CSV file")
 
 
 def setup_monitoring():
     """Set up monitoring configuration."""
-    print("📊 Setting up monitoring...")
+    print("[INFO] Setting up monitoring...")
     
     # Create Grafana datasource configuration
     datasource_config = {
@@ -114,12 +114,12 @@ def setup_monitoring():
     datasource_file = Path("monitoring/grafana/datasources/prometheus.yml")
     datasource_file.parent.mkdir(parents=True, exist_ok=True)
     datasource_file.write_text(json.dumps(datasource_config, indent=2))
-    print("✅ Created Grafana datasource configuration")
+    print("[SUCCESS] Created Grafana datasource configuration")
 
 
 def main():
     """Main setup function."""
-    print("🚀 TickDB Development Environment Setup")
+    print("TickDB Development Environment Setup")
     print("=" * 50)
     
     # Check Python version
@@ -140,15 +140,15 @@ def main():
     # Setup monitoring
     setup_monitoring()
     
-    print("\n🎉 Setup completed successfully!")
-    print("\n📋 Next steps:")
+    print("\n[SUCCESS] Setup completed successfully!")
+    print("\nNext steps:")
     print("   1. Run the basic example: python examples/basic_usage.py")
     print("   2. Try the CLI: tickdb --help")
     print("   3. Start with Docker: docker-compose up -d")
     print("   4. Access Grafana: http://localhost:3000 (admin/admin)")
     print("   5. Access Prometheus: http://localhost:9090")
     
-    print("\n💡 Useful commands:")
+    print("\nUseful commands:")
     print("   - tickdb load <source_id> <file_path> <schema_id>")
     print("   - tickdb query --symbol ES --limit 10")
     print("   - tickdb health")
